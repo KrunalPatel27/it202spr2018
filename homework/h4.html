@@ -31,19 +31,19 @@
         <form>
             <input type="text" name="name" placeholder="First and last name"/>
             <hr>
-            <select name="OS">
+            <select name="State">
                 <option value="selectState">Select your state</option>
-                <option value="illinois">IL</option>
-                <option value="wisconsin">WI</option>
+                <option value="Illinois">IL</option>
+                <option value="Wisconsin">WI</option>
             </select>
             <hr>
             <input type="text" name="course" list="courses" placeholder="Choose a course"/>
             <datalist id="courses">
-                <option value="CS107"></option>
-                <option value="CS109"></option>
-                <option value="CS111"></option>
-                <option value="CS141"></option>
-                <option value="CS151"></option>
+                <option value="CS107"/>
+                <option value="CS109"/>
+                <option value="CS111"/>
+                <option value="CS141"/>
+                <option value="CS151"/>
             </datalist>
             <a href="https://www.cs.uic.edu/~grad/CS_Flowchart.pdf">UIC Computer Science Undergraduate Prerequisite Flow-Chart</a>
             <hr>
@@ -60,15 +60,15 @@
         </form>
         <h2>Answers to questions</h2>
         <ol>
-            <li>The box model states that all HTML elements can be considered as boxes. Each element is wrapped by box with consist of margins, borders, padding, and content.</li>
-            <li>A "block-level" element occupies the entire space of its parent element. They always start on a new line and takes up the full width of parent element.</li>
-            <li>Paragraph is an example tag that is by default rendered as block-level element.</li>
-            <li>An "inline" element occupies the space bounded by the tags defining the element. They do not start on a new line and only takes up as much width as necessary.</li>
-            <li>Button is an example tag that is by default rendered as inline element.</li>
-            <li>CSS can be included in a seperate file and linked to in html file using link tag, or it can be embedded into HTML file using style tag inside head.</li>
-            <li>CSS selectors are patterns used to select elements for styling.</li>
-            <li>The following CSS rule can be used to set the background color of body to #0000FF (blue).<span id="question8body">body { <span id="question8property">background-color: #0000FF;</span> }</span></li>
-            <li><img id="question9Img" src="https://cppm.uic.edu/images/master_plan/Image%20(6).jpg" alt="CPPM master plan"></li>
+            <li id="1">The CSS box model is essentially a box that wraps around every HTML element. It consists of: margins, borders, padding, and the actual content.</li>
+            <li id="2">A "block-level" element occupies the entire space of its parent element. They always start on a new line and takes up the full width of parent element.</li>
+            <li id="3">div is by default a block element.</li>
+            <li id="4">An inline element does not start on a new line and only takes up as much width as necessary. Also they are bounded to their parents.</li>
+            <li id="5">span is an example element that is by default rendered as inline element.</li>
+            <li id="6">CSS can be linked through another file or embedded inside html.</li>
+            <li id="7">In CSS, selectors are patterns used to select the element(s) you want to style.</li>
+            <li id="8">The following CSS rule can be used to set the background color of body to #0000FF (blue).<span id="question8body">body { <span id="question8property">background-color: #0000FF;</span> }</span></li>
+            <li id="9"><img id="question9Img" src="https://cppm.uic.edu/images/master_plan/Image%20(6).jpg" alt="CPPM master plan"></li>
         </ol>
     </body>
 </html>
