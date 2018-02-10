@@ -1,0 +1,26 @@
+.carousel-item {
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.carousel-inner{
+	margin-bottom: 0px !important;
+
+}
+
+.about-h5{
+	padding: 25px;
+	text-align: center;
+}
+.about{
+	background-color: #fcb0b0;
+}
+section{
+	padding: 30px;
+	padding-top: 56px;
+}
+body{
+}
