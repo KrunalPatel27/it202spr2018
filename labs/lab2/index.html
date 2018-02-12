@@ -29,6 +29,7 @@
               url: url,
               method: 'GET',
             }).done(function(result) {
+              loadResponse(result);
               console.log(result);
             }).fail(function(err) {
               throw err;
@@ -40,7 +41,8 @@
         function loadResponse(response){
             $("response").append("<p> Results Returned: "+ response.results.length + "</p>");
             $.each(response.results, function(i,v){
-               $("#results").append();
+              console.log(v.display_title)
+               $("#results").append("<h6>"+v.display_title+"</h6>");
             });
         }
     </script>
