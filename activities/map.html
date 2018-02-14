@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+          getData();
+        var uluru = {lat: -25.363, lng: 131.044};
+        
+         function getData(){
+                url = "https://data.cityofchicago.org/resource/building-permits.json?$limit=5"
+                $.ajax({
+              url: url,
+              method: 'GET',
+            }).done(function(result) {
+              console.log(result);
+              var map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: 10,
+                  center: {lat: parseFloat(result[0].latitude), lng: parseFloat(result[0].longitude)}
+                });
+              $.each(result, function(i,v){
+                  console.log(v);
+                  var contentString = '<div id="content">'+
+              '<div id="siteNotice">'+
+              '</div>'+
+              '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+              '<div id="bodyContent">'+
+             
+              '</div>'+
+              '</div>';
+        
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+        
+          var marker = new google.maps.Marker({
+            position: {lat:parseFloat(v.latitude), lng:parseFloat(v.longitude)},
+            map: map,
+            title: 'Uluru (Ayers Rock)'
+          });
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+              })
+            }).fail(function(err) {
+              throw err;
+            });
+            }
+            
+       
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5_qjhbLhUDlCJLUP-Fx6MWzaCg6WUlZM&callback=initMap">
+    </script>
+  </body>
+</html>

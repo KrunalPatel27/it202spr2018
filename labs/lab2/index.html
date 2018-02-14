@@ -8,14 +8,34 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <style type="text/css">
+    .screen{
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container" id="home"></div>
-    <div class="container" id="search">
+    <div class="container screen" id="home">
+      <button id="buttonHometoSearch" class="btn btn-primary">Search Screen</button>
+    </div>
+    <div class="container screen" id="search">
         <input type="text" id="query" placeholder="Enter a search term"/>
         <button id="buttonSearch" class="btn btn-primary">Search</button>
     </div>
-    <div class="container" id="results"></div>
+    <div class="container screen" id="results" style="top-padding:20px;">
+        <div id = "resultsText">
+           <div class="card" id="cards">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Review</a>
+                </div>
+            </div>
+        </div>
+       </div>
+   
     <script>
     
         function doSearch(){
@@ -39,12 +59,32 @@
         $("#buttonSearch").click(function(){doSearch();});
         
         function loadResponse(response){
-            $("response").append("<p> Results Returned: "+ response.results.length + "</p>");
+          
+            
+            $("#resultsText").append("<h2> Results Returned: "+ response.results.length + "</h2>");
             $.each(response.results, function(i,v){
               console.log(v.display_title)
-               $("#results").append("<h6>"+v.display_title+"</h6>");
+              var temp = $("#cards").clone();
+                temp.find("h5").text(v["headline"]);
+                temp.find("h6").text(v["byline"]);
+                temp.find("p").text(v["summary_short"]);
+                temp.find("a").attr("href", v["link"]["url"]);
+                temp.show();
+                $("#resultsText").append(temp);
             });
+            $("#search").hide();
+            $("#results").show();
         }
+        $(document).ready(function(){
+          $("#home").show();
+          $("#cards").hide();
+        })
+        $("#buttonHometoSearch").click(function(){
+          $("#search").show();
+          $("#home").hide();
+          
+        });
+    
     </script>
 </body>
 </html>
