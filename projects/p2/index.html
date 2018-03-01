@@ -102,6 +102,15 @@
           });
           $('#Screen2').hide();
           $('#Screen3').show();
+          var url1 = "https://data.cityofchicago.org/resource/76dk-7ieb.json?$where=school_type= 'Charter'"
+          $.ajax({
+              url: url1,
+              method: 'GET',
+            }).done(function(result) {
+              $.each(result, function(i, v) {
+                  console.log(v.school_type);
+              });
+              });
         });
     </script>
 </body>
