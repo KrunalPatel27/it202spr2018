@@ -16,6 +16,10 @@
       :root{
         --mdc-theme-primary: blue;
       }
+      #map {
+        height: 600px;
+        width: 100%;
+      }
       </style>
   <style type="text/css">
     .screen{
@@ -24,8 +28,8 @@
   </style>
 </head>
 
-<body class="text-center">
-    <div class="container screen" id="Screen1">
+<body>
+    <div class="container screen text-center" id="Screen1">
       <div>
         <p>Start</p>
          <button class="mdc-button mdc-button--raised mdc-ripple-surface"
@@ -34,7 +38,7 @@
           </button>
       </div>
     </div>
-    <div class="container screen" id="Screen2">
+    <div class="container screen text-center" id="Screen2">
       <div class="text-center">
         <h4 class="mdc-typography--display1">Select by School Types</h2>
         <div class="form-group" style="height: 100%;">
@@ -46,12 +50,13 @@
         </button>
       </div>
     </div>
-    <div class="container screen" id="Screen3">
+    <div class="screen" id="Screen3">
       <p>Hello</p>
+      <div id="map"></div>
     </div>
    
     <script>
-        var selected_School_Types = [];
+        var selected_School_Types = "";
         window.onmousedown = function (e) {
             var el = e.target;
             if (el.tagName.toLowerCase() == 'option' && el.parentNode.hasAttribute('multiple')) {
@@ -98,20 +103,49 @@
         $('#done_select_schools').click(function(){
           var schoolTypes = $("#dynamic-list option:selected");
           $.each(schoolTypes, function(i,v){
-              selected_School_Types.push(v.text);
+            if(i == 0)
+              selected_School_Types += "'" +v.text +"'";
+            else
+              selected_School_Types += ",'" +v.text + "'";
           });
-          $('#Screen2').hide();
-          $('#Screen3').show();
-          var url1 = "https://data.cityofchicago.org/resource/76dk-7ieb.json?$where=school_type= 'Charter'"
+          
+          var url1 = "https://data.cityofchicago.org/resource/76dk-7ieb.json?$where=school_type IN ("+  selected_School_Types+ ")";
           $.ajax({
               url: url1,
               method: 'GET',
             }).done(function(result) {
-              $.each(result, function(i, v) {
-                  console.log(v.school_type);
+              
+              var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: {lat: 41.8781,lng: -87.6298}
               });
+              
+              $.each(result, function(i, v) {
+                 var location = {lat: parseFloat(v['school_latitude']), lng: parseFloat(v['school_longitude'])};
+              var contentString = '<div id="content">'+
+                                    '<div id="siteNotice"></div>'+
+                                    '<h1 id="firstHeading">'+v['short_name']+'</h1>'+
+                                    '<p><b>Result: </b>'+v['short_name']+'</p>'
+                                  '</div>';
+              var infowindow = new google.maps.InfoWindow({
+                content: contentString
+              });
+              var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: 'Chicago'
+              });
+              marker.addListener('click', function() {
+                infowindow.open(map, marker);
+              });
+              });
+          $('#Screen2').hide();
+          $('#Screen3').show();
               });
         });
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5_qjhbLhUDlCJLUP-Fx6MWzaCg6WUlZM">
     </script>
 </body>
 </html>
