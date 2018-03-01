@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css" type="text/css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <style>
+      :root{
+        --mdc-theme-primary: blue;
+      }
+      </style>
   <style type="text/css">
     .screen{
       display: none;
@@ -15,20 +24,85 @@
   </style>
 </head>
 
-<body>
+<body class="text-center">
     <div class="container screen" id="Screen1">
-        <p>deep</p>
+      <div>
+        <p>Start</p>
+         <button class="mdc-button mdc-button--raised mdc-ripple-surface"
+            data-mdc-auto-init="MDCRipple" id="start_button">
+          Lets Start
+          </button>
+      </div>
     </div>
     <div class="container screen" id="Screen2">
+      <div class="text-center">
+        <h4 class="mdc-typography--display1">Select by School Types</h2>
+        <div class="form-group" style="height: 100%;">
+          <select multiple class=" mdc-list" id= "dynamic-list" style="height: 100%; overflow-y: hidden;"></select>
+        </div>
+        <button class="mdc-button mdc-button--raised mdc-ripple-surface"
+          data-mdc-auto-init="MDCRipple" id="done_select_schools" style="margin: 10px;">
+          Next
+        </button>
+      </div>
     </div>
     <div class="container screen" id="Screen3">
+      <p>Hello</p>
     </div>
    
     <script>
+        var selected_School_Types = [];
+        window.onmousedown = function (e) {
+            var el = e.target;
+            if (el.tagName.toLowerCase() == 'option' && el.parentNode.hasAttribute('multiple')) {
+                e.preventDefault();
+                // toggle selection
+                if (el.hasAttribute('selected')) el.removeAttribute('selected');
+                else el.setAttribute('selected', '');
+                // hack to correct buggy behavior
+                var select = el.parentNode.cloneNode(true);
+                el.parentNode.parentNode.replaceChild(select, el.parentNode);
+            }
+        }
         $(document).ready(function(){
           $("#Screen1").show();
         })
-    
+        $("#start_button").click(function(){
+          $("#Screen1").hide();
+          $("#Screen2").show(function(){
+            getSchoolsType();
+          });
+        });
+        function getSchoolsType(){
+          $.ajax({
+              url: "https://data.cityofchicago.org/resource/76dk-7ieb.json?$select=school_type&$group=school_type",
+              method: 'GET',
+            }).done(function(result) {
+              displayScreen2(result);
+              });
+        }
+        function displayScreen2(schoolTypes){
+          document.getElementById("dynamic-list").setAttribute('size', schoolTypes.length);
+          $.each(schoolTypes, function(i,v){
+            addItemToSchoolList(v.school_type);
+          });
+        }
+        function addItemToSchoolList(schoolType){
+            var select = document.getElementById("dynamic-list");
+            var li = document.createElement('option');
+            li.setAttribute('id',"schoolType");
+            li.setAttribute('class', "mdc-list-item text-center");
+            li.appendChild(document.createTextNode(schoolType));
+            select.appendChild(li);
+        }
+        $('#done_select_schools').click(function(){
+          var schoolTypes = $("#dynamic-list option:selected");
+          $.each(schoolTypes, function(i,v){
+              selected_School_Types.push(v.text);
+          });
+          $('#Screen2').hide();
+          $('#Screen3').show();
+        });
     </script>
 </body>
 </html>
