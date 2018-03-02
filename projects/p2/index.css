@@ -1,8 +1,23 @@
 body{
     margin-top: 25px;
+   
 }
 .mdc-list{
     border-color: black;
     border-style: solid;
     border-width: 5px;
+}
+#map {
+    height:100vh;
+    width: 100%;
+}
+#Screen3{
+   
+}
+p{
+    margin-bottom: 0px;
+}
+#search_details{
+    padding-top: 50px;
+    
 }

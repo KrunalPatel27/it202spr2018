@@ -16,10 +16,6 @@
       :root{
         --mdc-theme-primary: blue;
       }
-      #map {
-        height: 600px;
-        width: 100%;
-      }
       </style>
   <style type="text/css">
     .screen{
@@ -31,7 +27,13 @@
 <body>
     <div class="container screen text-center" id="Screen1">
       <div>
-        <p>Start</p>
+        <h3>Search for Schools around Chicago</h3>
+        <p>By your preference of school types</br></p>
+        <ol class = "text-left">
+          <li>Click, Lets Start</li>
+          <li>Pick types of school for your search</li>
+          <li>Results will be displayed on a Map, Click on marker to view school name, address, rating and link to schools website</li>
+        </ol>
          <button class="mdc-button mdc-button--raised mdc-ripple-surface"
             data-mdc-auto-init="MDCRipple" id="start_button">
           Lets Start
@@ -51,7 +53,6 @@
       </div>
     </div>
     <div class="screen" id="Screen3">
-      <p>Hello</p>
       <div id="map"></div>
     </div>
    
@@ -121,28 +122,76 @@
               });
               
               $.each(result, function(i, v) {
-                 var location = {lat: parseFloat(v['school_latitude']), lng: parseFloat(v['school_longitude'])};
-              var contentString = '<div id="content">'+
-                                    '<div id="siteNotice"></div>'+
-                                    '<h1 id="firstHeading">'+v['short_name']+'</h1>'+
-                                    '<p><b>Result: </b>'+v['short_name']+'</p>'
-                                  '</div>';
-              var infowindow = new google.maps.InfoWindow({
-                content: contentString
+                var location = {lat: parseFloat(v['school_latitude']), lng: parseFloat(v['school_longitude'])};
+                var contentString = '<div id="content">'+
+                                      '<div id="siteNotice"></div>'+
+                                      '<h5 id="firstHeading">'+v['long_name']+'</h5>'+
+                                      '<p>'+v['address'] +', '+v['location_city']+', '+'IL'+', '+v['location_zip'] +'</p>'+
+                                      '<p><b>Rating: </b>'+v['overall_rating']+'</p>'+
+                                      '<p><a href="'+ v['website']+'">School Website</a></p>'+
+                                    '</div>';
+                var infowindow = new google.maps.InfoWindow({
+                  content: contentString
+                });
+                //var iconMarker = getIcon(v.school_type);
+                var marker = new google.maps.Marker({
+                  position: location,
+                  icon: getIcon(v.school_type),
+                  map: map,
+                  title: 'Chicago'
+                });
+                marker.addListener('click', function() {
+                  infowindow.open(map, marker);
+                });
               });
-              var marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                title: 'Chicago'
-              });
-              marker.addListener('click', function() {
-                infowindow.open(map, marker);
-              });
-              });
+              
           $('#Screen2').hide();
           $('#Screen3').show();
               });
         });
+        
+        function getIcon(typeSchool){
+          var path ="mapMarkers/"
+          switch(typeSchool){
+            case "Career academy":
+              path += "000000.png"
+              break;
+          case "Charter":
+              path += "00FFD3.png"
+              break;
+          case "Citywide-Option":
+              path += "00FFE2.png"
+              break;
+          case "Classical":
+              path += "0089FF.png"
+              break;
+          case "Contract":
+              path += "3500FF.png"
+              break;
+          case "Magnet":
+              path += "08721D.png"
+              break;
+          case "Military academy":
+              path += "757275.png"
+              break;
+          case "Neighborhood":
+              path += "C100C1.png"
+              break;
+          case "Regional gifted center":
+              path += "DD5C5C.png"
+              break;
+          case "Selective enrollment":
+              path += "F7FF00.png"
+              break;
+          case "Small":
+              path += "F70000.png"
+              break;
+          case "Special Education":
+              path += "FF8C00.png"
+              break;
+          }
+          return path;
+        }
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5_qjhbLhUDlCJLUP-Fx6MWzaCg6WUlZM">
