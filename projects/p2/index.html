@@ -53,6 +53,12 @@
       </div>
     </div>
     <div class="screen" id="Screen3">
+      <div class="text-center" id="previous_div">
+        <button class="mdc-button mdc-button--raised mdc-ripple-surface "
+              data-mdc-auto-init="MDCRipple" id="previous_button">
+            Previous
+        </button>
+      </div>
       <div id="map"></div>
     </div>
    
@@ -93,6 +99,7 @@
             addItemToSchoolList(v.school_type);
           });
         }
+        
         function addItemToSchoolList(schoolType){
             var select = document.getElementById("dynamic-list");
             var li = document.createElement('option');
@@ -101,15 +108,17 @@
             li.appendChild(document.createTextNode(schoolType));
             select.appendChild(li);
         }
+        
         $('#done_select_schools').click(function(){
           var schoolTypes = $("#dynamic-list option:selected");
+          selected_School_Types = "";
           $.each(schoolTypes, function(i,v){
             if(i == 0)
               selected_School_Types += "'" +v.text +"'";
             else
               selected_School_Types += ",'" +v.text + "'";
           });
-          
+          console.log(selected_School_Types);
           var url1 = "https://data.cityofchicago.org/resource/76dk-7ieb.json?$where=school_type IN ("+  selected_School_Types+ ")";
           $.ajax({
               url: url1,
@@ -117,7 +126,7 @@
             }).done(function(result) {
               
               var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 10,
+                zoom: 12,
                 center: {lat: 41.8781,lng: -87.6298}
               });
               
@@ -127,7 +136,7 @@
                                       '<div id="siteNotice"></div>'+
                                       '<h5 id="firstHeading">'+v['long_name']+'</h5>'+
                                       '<p>'+v['address'] +', '+v['location_city']+', '+'IL'+', '+v['location_zip'] +'</p>'+
-                                      '<p><b>Rating: </b>'+v['overall_rating']+'</p>'+
+                                      '<p><b>School Type: </b>' + v['school_type'] + ',  <b>Rating: </b>'+v['overall_rating']+'</p>'+
                                       '<p><a href="'+ v['website']+'">School Website</a></p>'+
                                     '</div>';
                 var infowindow = new google.maps.InfoWindow({
@@ -192,6 +201,13 @@
           }
           return path;
         }
+        
+        $('#previous_div').click(function() {
+          $("#Screen3").hide();
+          $("#Screen2").show(function(){
+            getSchoolsType();
+          });
+        });
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5_qjhbLhUDlCJLUP-Fx6MWzaCg6WUlZM">
