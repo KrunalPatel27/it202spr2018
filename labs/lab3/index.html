@@ -1,26 +1,44 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
-   
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+    <title>Lab 3</title>
   </head>
   <body>
-    <canvas id="myCanvas" width="400" height="600"></canvas>
+    <canvas id="myCanvas" width="578" height="400"></canvas>
     <script>
-      var c=document.getElementById("myCanvas");
-      var ctx=c.getContext("2d");
+    
+      var c = document.getElementById('myCanvas');
+      var ctx = c.getContext('2d');
+      var imageObj = new Image();
+      var playerImage = new Image();
+       
+      imageObj.onload = function() {
+        ctx.drawImage(imageObj, 0 ,0);
+        ctx.drawImage(player, 30,30, player.width * 0.3, player.height * 0.3);
+        };
+      imageObj.src = 'assets/space.jpeg'
+      player.src = 'assets/ball.png'
       
       var game = {lives: 3, score: 0};
-      var player = {x: 75, y:110 , color: "green", radius: 25};     
+     
+    
       var harm = {x: c.width, y:100 , color: "blue", radius: 25};
       
       
       function draw() {
+        
         ctx.clearRect(0,0,c.width,c.height);
         
-        
+        ctx.drawImage(imageObj, 0 ,0);
+        ctx.drawImage(player, 30,30, player.width * 0.3, player.height * 0.3);
+        ctx.fillStyle = "white";
+        ctx.fillText("Score: " + game.score + "  Lives: " + game.lives , c.width-120, 20);
         // draw harm
         harm.x--;
         
@@ -29,7 +47,7 @@
         }
         
         ctx.fillStyle = harm.color;
-        ctx.beginPath();
+        
         ctx.arc(harm.x,harm.y,harm.radius,0,2*Math.PI);
         ctx.fill();
         
@@ -50,7 +68,7 @@
             // TODO: handle game over condition
             
             
-            console.log(game);
+           
         }
         
         
@@ -62,10 +80,6 @@
         
         
         // draw player
-        ctx.fillStyle = player.color;
-        ctx.beginPath();
-        ctx.arc(player.x,player.y,player.radius,0,2*Math.PI);
-        ctx.fill();
         
         
         
@@ -83,15 +97,8 @@
       
       
       draw();
-
-      // TODO:  keyboard events to change player y coordinate
-      
-      
-      // TODO:  space bar to pause game
-
-
-
-
+    
+    
     </script>
   </body>
-</html>
+</html> 
