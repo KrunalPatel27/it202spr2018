@@ -1,102 +1,166 @@
 <!DOCTYPE HTML>
 <html>
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
       body {
         margin: 0px;
         padding: 0px;
       }
+      #playAgain{
+        margin:15px;
+      }
     </style>
     <title>Lab 3</title>
   </head>
   <body>
-    <canvas id="myCanvas" width="578" height="400"></canvas>
+    <div>
+      <h1>Catch The Ball, In Space!</h1>
+      <p>Instructions</p>
+      <ul>
+        <li>Play with Up &uarr; and Down &darr; arrow Keys</li>
+        <li>Catch the ball to score points</li>
+        <li>Lose lives if hit by an asteroid</li>
+      </ul>
+    </div>
+    <div>
+      <button id="playAgain" >Restart</button>
+    </div>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
     <script>
     
       var c = document.getElementById('myCanvas');
       var ctx = c.getContext('2d');
-      var imageObj = new Image();
-      var playerImage = new Image();
+      var imageObj = new Image (), playerImage = new Image(), rockImage = new Image(), ballImage = new Image();
        
+
+      imageObj.src = 'assets/space.jpeg'
+      playerImage.src = 'assets/plate.png'
+      rockImage.src = 'assets/rock.gif'
+      ballImage.src = 'assets/ball.png'
+      
+      var game = {lives: 2, score: 0, multiplier: 1};
+      var speed = 2;
+      var harm = {x: c.width, y: Math.random()*(c.height-50), width: 50, height: 50};
+      var player = {x:0, y: c.height/2,  width: 20, height: 100, multiplier:5};
+      var ball = {x: c.width, y: Math.random()*(c.height-50), width: 50, height: 50};
+      
       imageObj.onload = function() {
         ctx.drawImage(imageObj, 0 ,0);
-        ctx.drawImage(player, 30,30, player.width * 0.3, player.height * 0.3);
-        };
-      imageObj.src = 'assets/space.jpeg'
-      player.src = 'assets/ball.png'
-      
-      var game = {lives: 3, score: 0};
-     
-    
-      var harm = {x: c.width, y:100 , color: "blue", radius: 25};
-      
+      };
       
       function draw() {
         
         ctx.clearRect(0,0,c.width,c.height);
+        //draw
+        ctx.drawImage(imageObj, 0, 0 );
+  
+        //move objects
+        harm.x-=speed;
+        ball.x-=speed;
         
-        ctx.drawImage(imageObj, 0 ,0);
-        ctx.drawImage(player, 30,30, player.width * 0.3, player.height * 0.3);
-        ctx.fillStyle = "white";
-        ctx.fillText("Score: " + game.score + "  Lives: " + game.lives , c.width-120, 20);
-        // draw harm
-        harm.x--;
-        
+        //check out of bounds for objects
         if (harm.x <= 0) {
           harm.x = c.width;
+          harm.y = Math.random()*(c.height- harm.height);
+        }
+        if(ball.x <=0 ){
+          ball.x = c.width;
+          ball.y = Math.random()*(c.height- ball.height);
+          game.multiplier=1;
         }
         
-        ctx.fillStyle = harm.color;
-        
-        ctx.arc(harm.x,harm.y,harm.radius,0,2*Math.PI);
-        ctx.fill();
-        
-        // collision check, using code from 
+        // collision detection, using code from 
         //   https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-        
-        var dx = player.x - harm.x;
-        var dy = player.y - harm.y;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < player.radius + harm.radius) {
-            // collision detected!
-            console.log("collision");
-            
-            harm.x = c.width;   // reposition harm 
-            game.lives--;       // reduce lives
-            
-            // TODO: handle game over condition
-            
-            
-           
+        if( harm.x < .55*player.width){
+          if(Math.max(player.y + player.height, harm.y + harm.height)
+              - Math.min(player.y, harm.y) 
+              < player.height + (harm.height)){
+                speed-=2;
+                if(speed < 2){
+                  speed = 2; 
+                }
+                game.lives -= 1;
+                harm.x = c.width;
+                harm.y = Math.random()*(c.height- harm.height);
+              }
         }
-        
-        
-        // TODO:  draw benefit
-        
-        
-        
-        
-        
+        if( ball.x < .55*player.width){
+          if(Math.max(player.y + player.height, ball.y + ball.height)
+              - Math.min(player.y, ball.y) 
+              < player.height + (ball.height)){
+                if(speed < 7){
+                  console.log(speed);
+                  speed += .5; 
+                }
+                game.score+=game.multiplier;
+                game.multiplier+=1;
+                ball.x = c.width;
+                ball.y = Math.random()*(c.height- ball.height);
+                
+              }
+        }
         
         // draw player
-        
-        
-        
+        ctx.drawImage(playerImage, player.x , player.y, player.width, player.height); //player
+        ctx.drawImage(ballImage, ball.x, ball.y, ball.width, ball.height); //ball
+        ctx.drawImage(rockImage, harm.x, harm.y, harm.width, harm.height); //rock
         
         // TODO:  draw score and lives
-      
-        
-      
-      
-      
+        ctx.fillStyle = "white";
+        ctx.font="10px Arial";
+        ctx.fillText("Score: " + game.score + "  Lives: " + game.lives , c.width-120, 20);
+        if(game.lives < 1){
+            ctx.fillStyle = "red";
+            ctx.font="30px Arial";
+            ctx.fillText("Game Over" , c.width/2-75, c.height/2);
+            console.log("returns")
+            return;
+        }
+        console.log(speed);
         requestAnimationFrame(draw);
       }
       
-      
-      
-      
+      document.addEventListener('keydown', function(event) {
+        //up key
+        if(event.keyCode == 38) {
+          player.y-=player.multiplier;
+          player.multiplier+=.5;
+          if(player.y < 0)
+          player.y = 0;
+        }
+        //down key
+        else if(event.keyCode == 40) {
+          player.y+=player.multiplier;
+          player.multiplier+=.5;
+          if(player.y > c.height-player.height)
+          player.y = c.height-player.height;
+        }
+      });
+      document.addEventListener('keyup', function(event){
+        //up key
+        if(event.keyCode == 38) {
+          player.multiplier = 5;
+        }
+        //down key
+        else if(event.keyCode == 40) {
+          player.multiplier = 5;
+        }
+        
+      });
+      $('#playAgain').click(function(){
+      game = {lives: 2, score: 0, multiplier: 1};
+      speed = 2;
+      harm = {x: c.width, y: Math.random()*(c.height-50), width: 50, height: 50};
+      player = {x:0, y: c.height/2,  width: 20, height: 100, multiplier:5};
+      ball = {x: c.width, y: Math.random()*(c.height-50), width: 50, height: 50};
       draw();
+      });
+      
+      
+      
+      
+     draw();
     
     
     </script>
