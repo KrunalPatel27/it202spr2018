@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Hello World</title>
+        <link rel="manifest" href="manifest.json">
+    </head>
+    <body>
+        <h1>Hello World</h1>
+        <p>Krunal Patel</p>
+    </body>
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "Activity18-1",
+  "short_name": "a18-1",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "A simply readable Hacker News app.",
+  "icons": [{
+    "src": "ball.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }]
+}

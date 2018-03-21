@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Test 2</title>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+        var url = "https://data.cityofchicago.org/resource/tt4n-kn4t.json?$WHERE=department==%22CITY%20COUNCIL%22"
+        
+         $.ajax({
+              url: url,
+              method: 'GET',
+            }).done(function(result) {
+              $.each(result, function(i,v){
+                  if(v["full_or_part_time"] == "P")
+                   $("<p> Name:"+ v["name"]+ "Title:"+v["job_titles"]+"</p>").appendTo("body");
+              })
+            });
+    </script>
+</html>
