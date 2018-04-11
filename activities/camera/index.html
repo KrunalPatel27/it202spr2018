@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+        <video id="player" controls autoplay></video>
+<button id="capture">Capture</button>
+<canvas id="canvas" width=320 height=240></canvas>
+<script>
+
+
+
+  const player = document.getElementById('player');
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
+  const captureButton = document.getElementById('capture');
+  var POST= "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB78XM9gWzfArKk5utg0J2GkyklMU2heLo"
+    var requestJSON = {
+  "requests":[
+    {
+      "image":{
+        "content": canvas.toDataURL().split(",")[1]
+      },
+      "features":[
+        {
+          "type":"LABEL_DETECTION",
+          "maxResults":10
+        }
+      ]
+    }
+  ]
+}
+  const constraints = {
+    video: true,
+  };
+
+  captureButton.addEventListener('click', () => {
+    // Draw the video frame to the canvas.
+    context.drawImage(player, 0, 0, canvas.width, canvas.height);
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      url: POST,
+      data: JSON.stringify(requestJSON)
+      
+    }).done(function (results){
+        console.log(results)
+    });
+
+  });
+
+  // Attach the video stream to the video element and autoplay.
+  navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+      player.srcObject = stream;
+    });
+
+  
+</script>
+    </body>
+</html>
