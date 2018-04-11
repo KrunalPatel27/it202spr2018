@@ -6,17 +6,28 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/index.css" type="text/css" />
+        <style type="text/css">
+            :root {
+                --mdc-theme-primary: #F44336;
+                --mdc-theme-secondary: #EF6C00;
+                --mdc-theme-background: #FFEB3B;
+            }
+        </style>
     </head>
 
     <body>
         <header class="mdc-toolbar">
           <div class="mdc-toolbar__row">
-            <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-              <i href="#" class="material-icons mdc-toolbar__menu-icon">menu</i>
+            <section class="mdc-toolbar__section mdc-toolbar__section--align-start ">
+              <button class="mdc-button mdc-button--unelevated toolbar_button">
+                    <i class="material-icons mdc-button__icon">restaurants</i>
+              </button>
               <span class="mdc-toolbar__title">Title</span>
             </section>
             <section class="mdc-toolbar__section mdc-toolbar__section--align-end mdc-toolbar__section--shrink-to-fit">
-                <a class="material-icons search align-icons" aria-label="Search" alt="Search">my_location</a>
+                <button class="mdc-button mdc-button--unelevated toolbar_button">
+                    <i class="material-icons mdc-button__icon">my_location</i>
+                </button>
             </section>
           </div>
         </header>
