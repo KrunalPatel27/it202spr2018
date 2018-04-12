@@ -46,8 +46,11 @@ body{
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {  
   .mdc-toolbar__title{
-      font-size: 3.75rem;
+      font-size: 5.0rem;
       margin-left: 8px ;
+      height: 72px;
+      padding-top: 26px;
+      padding-bottom: 0px;
   }
   .mdc-button .mdc-button__icon{
       font-size: 72px;
@@ -83,8 +86,11 @@ body{
 @media (min-width: 992px) { 
   .mdc-toolbar__title{
       font-size: 2.25rem;
-      margin-left: 0px !important;
-      padding-left: 8px;
+      margin-left: 8px ;
+      height: 32px;
+      padding-top: 8px;
+      padding-bottom: 0px;
+      
   }
   .mdc-button .mdc-button__icon{
       font-size: 36px;
@@ -112,6 +118,9 @@ body{
   }
   .mdc-toolbar__section--align-end{
       padding-right: 16px;
+  }
+  .mdc-toolbar__section--align-start{
+      margin-top: 4px;
   }
 
 }
