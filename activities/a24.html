@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <textarea rows="4" cols="20"></textarea>
+            <button id="btn" class="translate">Translate</button> 
+        </div>
+        <div>
+            <textarea rows="4" cols="20" class="output" disabled ></textarea>
+        </div>
+        <script>
+            // Enter an API key from the Google API Console:
+//   https://console.developers.google.com/apis/credentials
+const apiKey = "AIzaSyAM-NxYi-E6HD1N18M75-jbqIwuo-CDzSA";
+
+// Set endpoints
+const endpoints = {
+  translate: "",
+  detect: "detect",
+  languages: "languages"
+};
+
+// Abstract API request function
+function makeApiRequest(endpoint, data, type, authNeeded) {
+  url = "https://www.googleapis.com/language/translate/v2/" + endpoint;
+  url += "?key=" + apiKey;
+
+  // If not listing languages, send text to translate
+  if (endpoint !== endpoints.languages) {
+    url += "&q=" + encodeURI(data.textToTranslate);
+  }
+
+  // If translating, send target and source languages
+  if (endpoint === endpoints.translate) {
+    url += "&target=" + data.targetLang;
+    url += "&source=" + data.sourceLang;
+  }
+
+  // Return response from API
+  return $.ajax({
+    url: url,
+    type: type || "GET",
+    data: data ? JSON.stringify(data) : "",
+    dataType: "json",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }
+  });
+}
+
+// Translate
+function translate(data) {
+  makeApiRequest(endpoints.translate, data, "GET", false).done(function(
+    resp
+  ) {
+    $(".output").text(resp.data.translations[0].translatedText);
+  });
+}
+
+
+
+// On document ready
+$(function() {
+  window.makeApiRequest = makeApiRequest;
+  var translationObj = {};
+
+  $(document)
+    // Bind translate function to translate button
+    .on("click", "button.translate", function() {
+      translationObj = {
+        sourceLang: "en",
+        targetLang: "de",
+        textToTranslate: $("textarea").val()
+      };
+
+      if (translationObj.targetLang !== null) {
+        translate(translationObj);
+      } else {
+        alert("Please select a target language");
+      }
+    })
+});
+
+            
+        </script>
+    </body>
+</html>
