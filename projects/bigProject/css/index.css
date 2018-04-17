@@ -6,3 +6,7 @@ body{
 .mdc-toolbar__row {
     min-height: 64px;
 }
+.mdc-toolbar__custom_spacing{
+    margin-left: 2px;
+    margin-right: 2px;
+}
