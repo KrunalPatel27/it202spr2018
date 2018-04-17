@@ -3,36 +3,6 @@
 body{
     margin: 0px;
 }
-
-/*for phone portrait mode */
-@media (min-width: 320px) and (max-width: 544px) {  
-  .mdc-toolbar__title{
-    font-family: Jua
-  }
-  .mdc-toolbar{
-    height: 80px !important;
-  }
-  
-}
-/* Small devices (landscape phones, 544px and up) */
-@media (min-width: 544px) and (max-width: 768px) {  
-   .mdc-toolbar{
-    height: 80px !important;
-  }
-}
- 
-/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
-@media (min-width: 768px) and (max-width: 992px) {  
-  
-   .mdc-toolbar{
-    height: 80px !important;
-  }
-
-}
- 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) { 
-    .mdc-toolbar{
-    height: 80px !important;
-  }
+.mdc-toolbar__row {
+    min-height: 64px;
 }
