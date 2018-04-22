@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Jua');
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Varela+Round|Jua|Handlee|Enriqueta|Roboto');
 
 body{
     margin: 0px;
 }
+
+/* Toolbar*/
 .mdc-toolbar__row {
     min-height: 64px;
 }
@@ -13,3 +15,81 @@ body{
 #toolbarTitle{
     font-family: Jua;
 }
+
+
+
+/* For Welcome Screen*/
+#welcomeScreen{
+   background: linear-gradient(10deg, #FFEB3B, #FFEBEE);
+   height: calc(100vh - 64px)
+}
+#welcomeText1{
+    font-size: 32px;
+    font-family: Indie Flower;
+}
+#welcomeText2{
+    font-size: 35px;
+    font-family: Enriqueta;
+    color: #0277BD;
+}
+.center {
+    padding: 50px 0;
+    text-align: center;
+}
+#btnCenterMap{
+    background-color: #F44336;
+    color: white;
+}
+#seachText{
+    font-size: 20px;
+    font-family: Roboto;
+    
+}
+#searchBox{
+    position: absolute;
+    margin-top: calc(100vh - 70vh);
+    width: 100%;
+    text-align: center;
+}
+
+/* Small devices (landscape phones, 544px and up) */
+@media (min-width: 544px) {  
+    #welcomeText1{
+        font-size: 32px;
+        font-family: Indie Flower;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    #welcomeText2{
+        font-size: 35px;
+        font-family: Enriqueta;
+        color: #0277BD;
+    }
+}
+ 
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {  
+    #welcomeText1{
+        font-size: 38px;
+        font-family: Indie Flower;
+    }
+    #welcomeText2{
+        font-size: 42px;
+        font-family: Enriqueta;
+        color: #0277BD;
+    }
+    #seachText{
+    font-size: 30px;
+    }
+    
+}
+ 
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+   
+}
+
+
+
+/*Search Results*/
+

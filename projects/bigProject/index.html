@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>title In Progress</title>
+        <title>FoodStop</title></title>
         <link href="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -23,49 +23,92 @@
         
         
           <!-- Top toolbar stuff goes here-->
-          <div class="mdc-toolbar">
+        <div class="mdc-toolbar">
             <div class="mdc-toolbar__row mdc-toolbar__row--custom-height">
                 <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
                     <i class="material-icons mdc-toolbar__menu-icon">restaurant</i>
-                    <span class="mdc-toolbar__title" id="toolbarTitle"> Title </span>
+                    <span class="mdc-toolbar__title" id="toolbarTitle"> FoodStop</span>
                 </section>
                 <section class="mdc-toolbar__section mdc-toolbar__section--shrink-to-fit mdc-toolbar__section--align-end">
-                    <button id="btnCenterMap" class="mdc-toolbar__menu-icon mdc-fab material-icons " style="margin-right: 4px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
-                        <span class="mdc-fab__icon">my_location</span>
-                    </button>
                     
                     <button id="btnSettings" class="mdc-toolbar__menu-icon mdc-fab material-icons " aria-label="Settings" data-mdc-auto-init="MDCRipple">
                         <span class="mdc-fab__icon">settings</span>
                     </button>
                 </section>
             </div>
-          </div>
+        </div>
           
               
+              
+        <div id="welcomeScreen">
+            
+            <!--
+            <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--upgraded mdc-text-field--dense" data-mdc-auto-init="MDCTextField">
+                <input type="text" id="txtSearchRestaurants" class="mdc-text-field__input">
+                <label for="txtSearchRestaurants" class="mdc-floating-label">Search</label>
+                
+                <div class="mdc-notched-outline">
+                    <svg>
+                        <path class="mdc-notched-outline__path"></path>
+                    </svg>
+                </div>
+                <div class="mdc-notched-outline__idle"></div>
+            </div>
+            -->
+            
+            <!-- Interactive text-->
+            <div id="welcomeText" class="center">
+                <div id="welcomeText1">Discover New Food & Experiences near you.</div>
+                <div id="welcomeText2">For on the go!</div>
+            </div>
+            
+            <!-- Search Area with GPS Enabled -->
+            <div id="searchBox">
+                <div id="seachText">Search Area</div>
+                <div class="mdc-text-field mdc-text-field--upgraded" data-mdc-auto-init="MDCTextField">
+                  <input type="text" id="my-text-field" class="mdc-text-field__input">
+                  <label class="mdc-floating-label" for="my-text-field">ZipCode</label>
+                  <div class="mdc-line-ripple"></div>
+                </div>
+                <button id="btnCenterMap" onclick="geoFindMe()" class="mdc-toolbar__menu-icon mdc-fab material-icons " style="margin-right: 4px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
+                    <span class="mdc-fab__icon">my_location</span>
+                </button>
+            </div>
+            
+        </div>
             <!-- Plan a welcome screen and searchable options-->
-                                <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--upgraded mdc-text-field--dense" data-mdc-auto-init="MDCTextField">
-                                    <input type="text" id="txtSearchRestaurants" class="mdc-text-field__input">
-                                    <label for="txtSearchRestaurants" class="mdc-floating-label">Search</label>
-                                    
-                                    <div class="mdc-notched-outline">
-                                        <svg>
-                                            <path class="mdc-notched-outline__path"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="mdc-notched-outline__idle"></div>
-                                </div>
-                                
-                                <div class="mdc-text-field mdc-text-field--upgraded" data-mdc-auto-init="MDCTextField">
-                                  <input type="text" id="my-text-field" class="mdc-text-field__input">
-                                  <label class="mdc-floating-label" for="my-text-field">Hint text</label>
-                                  <div class="mdc-line-ripple"></div>
-                                </div>
+        
 
 
 
           
         </main>
-        
+        <script>
+            function geoFindMe() {
+              var output = document.getElementById("out");
+            
+              if (!navigator.geolocation){
+                output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+                return;
+              }
+            
+              function success(position) {
+                var latitude  = position.coords.latitude;
+                var longitude = position.coords.longitude;
+            
+                console.log(latitude, longitude);
+              }
+            
+              function error() {
+                  console.log("error")
+              }
+            
+            
+              navigator.geolocation.getCurrentPosition(success, error);
+            }
+            
+            
+        </script>
         <script src="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.js"></script>
         <script>window.mdc.autoInit();</script>
     </body>
