@@ -47,7 +47,7 @@ body{
 }
 #searchBox{
     position: absolute;
-    margin-top: calc(100vh - 70vh);
+    margin-top: calc(100vh - 80vh);
     width: 100%;
     text-align: center;
 }
