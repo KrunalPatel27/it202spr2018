@@ -3,17 +3,23 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta http-equiv="Access-Control-Allow-Origin" content="*">
         <title>FoodStop</title></title>
         <link href="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <link rel="stylesheet" href="css/index.css" type="text/css" />
+        <header name = "Access-Control-Allow-Origin" value = "*" />
         
         <style type="text/css">
             :root {
                 --mdc-theme-primary: #F44336;
                 --mdc-theme-secondary: #EF6C00;
                 --mdc-theme-background: #FFEB3B;
+            }
+            .screen{
+              display: none;
             }
         </style>
     </head>
@@ -40,7 +46,7 @@
           
               
               
-        <div id="welcomeScreen">
+        <section id="welcomeScreen" class="">
             
             <!--
             <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--upgraded mdc-text-field--dense" data-mdc-auto-init="MDCTextField">
@@ -65,41 +71,95 @@
             <!-- Search Area with GPS Enabled -->
             <div id="searchBox">
                 <div id="seachText">Search Area</div>
-                <div class="mdc-text-field mdc-text-field--upgraded" data-mdc-auto-init="MDCTextField">
-                  <input type="text" id="my-text-field" class="mdc-text-field__input">
+                <div class="mdc-text-field mdc-text-field--upgraded searchArea1" data-mdc-auto-init="MDCTextField">
+                  <input type="text" id="my-text-field" class="mdc-text-field__input" style="overflow: hidden">
                   <label class="mdc-floating-label" for="my-text-field">ZipCode</label>
                   <div class="mdc-line-ripple"></div>
                 </div>
-                <button id="btnCenterMap" onclick="geoFindMe()" class="mdc-toolbar__menu-icon mdc-fab material-icons " style="margin-right: 4px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
-                    <span class="mdc-fab__icon">my_location</span>
+                <button id="btnCenterMap" onclick="geoFindMe()" class="mdc-toolbar__menu-icon mdc-fab material-icons searchArea2" style="margin-right: 4px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
+                    <span class="mdc-fab__icon searchArea2">my_location</span>
                 </button>
+                <div id="locationFound" style="display: none; color: green; padding-top:10px;"> location found!!!</div>
+                <div id="locationNotFound" style="display: none; color: red;  padding-top:10px;">Cannot find location :(</div>
+                <div id="locationAdvise" style="display: none; color: black;  padding-top:10px;">Enable location services or enter ZipCode</div>
+                <div id="beginResults" style="display:none; padding-top: 5px;">
+                    <button class="mdc-button mdc-button--raised mdc-button--dense mdc-ripple-upgraded" onclick="showResults()">
+                      Discover
+                    </button>
+                </div>
             </div>
             
-        </div>
+        </section>
             <!-- Plan a welcome screen and searchable options-->
-        
-
-
+        <section id="cardView" class="screen">
+            
+            <div id="spinnerLoader" class="center">
+                <div  class="loader"></div>
+            </div>
+            
+            <div id="resultsView" class="screen">
+                <div class="w3-content w3-display-container">
+                  
+                  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+                  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+                </div>
+                
+                <div id="details">
+                    <div>
+                        <span id="name">The Chicago Restaurant</span>
+                        
+                    </div>
+                    <div >
+                        <span class="styleCardsDetails">123 rolling st,</span>
+                        <span class="right styleCardsDetails">pricing</span>
+                    </div>
+                    <div>
+                        <span class="styleCardsDetails">Chicago, IL 60607</span>
+                        <span class="right styleCardsDetails" id="ratings"> Ratings</<span>
+                    </div>
+                    <div id="choiceDetails">
+                        <button id="likeRestaurant" onclick="" class="mdc-toolbar__menu-icon mdc-fab material-icons" style="margin-right: 8px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">grade</span>
+                        </button>
+                        <button id="dislikeRestaurant" onclick="" class="mdc-toolbar__menu-icon mdc-fab material-icons" style="margin-right: 8px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
+                            <span class="mdc-fab__icon">clear</span>
+                        </button>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </section>
 
           
         </main>
         <script>
+            var apiKey = "AIzaSyCkPhkzkLfLUQmJ-c8QHHiIByXNFP3lY2w";
+            var locationOBJ = {found: false, latitude: 0, longitude: 0, dest: ""};
+            var geocoder;
+            var listOfRestaurants = [];
+            
             function geoFindMe() {
               var output = document.getElementById("out");
             
               if (!navigator.geolocation){
-                output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+                alert("Geolocation is not supported by your browser");
                 return;
               }
             
               function success(position) {
-                var latitude  = position.coords.latitude;
-                var longitude = position.coords.longitude;
-            
-                console.log(latitude, longitude);
+                locationOBJ.latitude  = position.coords.latitude;
+                locationOBJ.longitude = position.coords.longitude;
+                locationOBJ.found = true;
+                $('.searchArea1').hide();
+                $('.searchArea2').hide();
+                $('#locationFound').show();
+                $('#beginResults').show();
+                $('#locationFound').html('Location: '+ geocodeLatLng());
               }
             
               function error() {
+                   $('#locationAdvise').show();
                   console.log("error")
               }
             
@@ -107,10 +167,138 @@
               navigator.geolocation.getCurrentPosition(success, error);
             }
             
+            function geocodeLatLng(){
+                var latlng = {lat: parseFloat(locationOBJ.latitude), lng: parseFloat(locationOBJ.longitude)};
+                geocoder.geocode({'location': latlng}, function(results, status) {
+                if (status === 'OK') {
+                    if (results[1]) {
+                        locationOBJ.dest = results[1]["formatted_address"];
+                      return results[1]["formatted_address"];
+                    } else {
+                      window.alert('No results found');
+                    }
+                } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                }  
+      
+                });
+                return "Chicago";
+                
+            }
+            
+            function showResults(){
+                $('#welcomeScreen').hide();
+                $('#cardView').show();
+                getPlacesAtLoactions();
+            }
+            
+            
+            function initGeoLocationStuff(){
+                geocoder = new google.maps.Geocoder;
+            }
+            
+            function getPlacesAtLoactions(){
+                var yql_url = 'https://query.yahooapis.com/v1/public/yql';
+                var url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+ locationOBJ.latitude +","+ locationOBJ.longitude+"&radius=5000&type=restaurant&keyword=food&key="+apiKey;
+                
+                $.ajax({
+                    'url': yql_url,
+                    'data': {
+                        'q': 'SELECT * FROM json WHERE url="'+url+'"',
+                        'format': 'json',
+                        'jsonCompat': 'new',
+                    },
+                    'dataType': 'jsonp',
+                    'success': function(response) {
+                        var results = response["query"]["results"]["json"]['results'];
+                        $.each(results, function(k,v){
+                            listOfRestaurants.push(v.place_id);
+                        });
+                        createTemplateView(0);
+                    },
+                });
+            }
+            
+            function createTemplateView(index){
+                var yql_url = 'https://query.yahooapis.com/v1/public/yql';
+                var url = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + listOfRestaurants[index] + "&key=" + apiKey;
+                $.ajax({
+                    'url': yql_url,
+                    'data': {
+                        'q': 'SELECT * FROM json WHERE url="'+url+'"',
+                        'format': 'json',
+                        'jsonCompat': 'new',
+                    },
+                    'dataType': 'jsonp',
+                    'success': function(response) {
+                        var results = response["query"]["results"]["json"]["result"];
+                        address = results["address_components"];
+                        var addr = {
+                            street_number: address[0]["short_name"],
+                            street_name: address[1]["short_name"],
+                            city: address[3]["short_name"],
+                            state: address[5]["short_name"],
+                            country: address[6]["short_name"],
+                            zipcode: address[7]["short_name"]
+                        };
+                        var restaurantDetails ={
+                            name: results["name"],
+                            address:addr,
+                            phone: results["formatted_phone_number"],
+                            id: results["place_id"],
+                            price_level: results["price_level"],
+                            rating: results["rating"],
+                            reviews: results["reviews"],
+                            hours: results["opening_hours"]["weekday_text"],
+                            photos: results["photos"]
+                        }
+                        populateDisplay(restaurantDetails);
+                        
+                    },
+                });
+            }
+            
+            var slideIndex = 1;
+            
+            function plusDivs(n) {
+                showDivs(slideIndex += n);
+            }
+            
+            function showDivs(n) {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                if (n > x.length) {slideIndex = 1} 
+                if (n < 1) {slideIndex = x.length} ;
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none"; 
+                }
+                x[slideIndex-1].style.display = "block"; 
+            }
+                        
+            function populateDisplay(details){
+                $('#spinnerLoader').hide();
+                $('#resultsView').show();
+                console.log(details);
+                var width =$(window).width();
+                var height = $(window).height() * .5;
+                console.log("height: ", height);
+                $.each(details["photos"], function(k,v){
+                    var urlPhoto = "https://maps.googleapis.com/maps/api/place/photo?maxwidth="+Math.round(width)+"&maxheight="+Math.round(height)+"&photoreference="+v.photo_reference+"&key="+apiKey;
+                    $(".w3-content").append("<img class='mySlides' src="+ urlPhoto+">");
+                });
+                plusDivs(slideIndex);
+                $('#spinnerLoader').hide();
+                $('#resultsView').show();
+                
+            }
+            
             
         </script>
         <script src="https://unpkg.com/material-components-web@0.34.1/dist/material-components-web.js"></script>
         <script>window.mdc.autoInit();</script>
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkPhkzkLfLUQmJ-c8QHHiIByXNFP3lY2w&callback=initGeoLocationStuff&libraries=places">
+        </script>
     </body>
     
 </html>
