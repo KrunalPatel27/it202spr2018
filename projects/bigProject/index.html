@@ -110,12 +110,12 @@
                         
                     </div>
                     <div >
-                        <span class="styleCardsDetails">123 rolling st,</span>
-                        <span class="right styleCardsDetails">pricing</span>
+                        <span id="street" class="styleCardsDetails">123 rolling st,</span>
+                        <span id="pricing" class="right styleCardsDetails">pricing</span>
                     </div>
                     <div>
-                        <span class="styleCardsDetails">Chicago, IL 60607</span>
-                        <span class="right styleCardsDetails" id="ratings"> Ratings</<span>
+                        <span id="city_state" class="styleCardsDetails">Chicago, IL 60607</span>
+                        <span id="ratings" class="right styleCardsDetails"> Ratings</<span>
                     </div>
                     <div id="choiceDetails">
                         <button id="likeRestaurant" onclick="" class="mdc-toolbar__menu-icon mdc-fab material-icons" style="margin-right: 8px;" aria-label="Location" data-mdc-auto-init="MDCRipple">
@@ -284,12 +284,18 @@
                 console.log("height: ", height);
                 $.each(details["photos"], function(k,v){
                     var urlPhoto = "https://maps.googleapis.com/maps/api/place/photo?maxwidth="+Math.round(width)+"&maxheight="+Math.round(height)+"&photoreference="+v.photo_reference+"&key="+apiKey;
-                    $(".w3-content").append("<img class='mySlides' src="+ urlPhoto+">");
+                    $(".w3-content").prepend("<img class='mySlides' src="+ urlPhoto+">");
                 });
+                var addrLocal = details["address"];
+                $('#name').text(details["name"]);
+                $('#street').text(addrLocal["street_number"]+ " " + addrLocal["street_name"]);
+                $('#city_state').text(addrLocal["city"] +", " +addrLocal["state"]+" "+addrLocal["zipcode"]);
+                $('#pricing').text(details["price_level"]);
+                $('#ratings').text(details["rating"]);
+                
                 plusDivs(slideIndex);
                 $('#spinnerLoader').hide();
                 $('#resultsView').show();
-                
             }
             
             
