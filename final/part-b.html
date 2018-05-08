@@ -92,7 +92,17 @@
                         markers.push(marker);
                         
                     //Add to list
-                    $("#list ul").append("<li class='list-group-item'>"+v['site_name'] +"</li>");
+                    $("#list ul").append(
+                        "<a class='list-group-item list-group-item-action flex-column align-items-start'>"+
+                       "<div class='d-flex w-100 justify-content-between'>" +
+                        "  <h5 class='mb-1'>"+v['site_name']+"</h5>"+
+                         " <small>"+v['clinic_type']+"</small>"+
+                        "</div>"+
+                        "<p class='mb-1'>"+v['street_address'] +"</p>"+
+                        "<p class='mb-1'>"+v['city'] +"</p>"+
+                        "<p class='mb-1'>"+ v['phone_1']+"</p>"+
+                        "<small>Donec id elit non mi porta.</small>"+
+                      "</a>");
                   }
               });
               
