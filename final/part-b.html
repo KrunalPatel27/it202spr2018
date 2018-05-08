@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    </head>
+    <style type="text/css">
+        body{
+            margin: 10px;
+        }
+        div{
+            margin:5px;
+        }
+        #map{
+            height: 450px;
+        }
+        .hide{
+            display:none;
+        }
+    </style>
+    <body>
+        <div>
+              <input id="STI" type="radio" name="clinic" value="STI">STI Specialty Clinic<br>
+              <input id="Mental" type="radio" name="clinic" value="Mental">Mental Health Clinic<br>
+              <input id="WIC" type="radio" name="clinic" value="WIC">WIC Clinic<br>
+            
+            <button id="search">Search</button>
+        </div>
+        <h3>Map & List</h3>
+        <div id="map"></div>
+        <div id="list">
+            <ul class="list-group">
+            </ul>
+        </div>
+    </body>
+    <script>
+        $( document ).ready(function() {
+            getResults();
+        });
+        var resultsbol = false;
+        var results, map;
+        var markers = [];
+        $("#search").click(function(){
+            while(resultsbol ==false){
+                getResults();
+            }
+            if($('#STI').is(':checked')){
+                mapResults("STI Specialty Clinic");
+            }else if($('#Mental').is(':checked')){
+                mapResults("Mental Health Clinic");
+            }else if($('#WIC').is(':checked')){
+                mapResults("WIC Clinic");
+            }
+        });
+        
+        function getResults(){
+            $.ajax({
+              url: "https://data.cityofchicago.org/resource/t57k-za2y.json",
+              method: 'GET',
+            }).done(function(result) {
+                results =  result;
+                resultsbol = true;
+                console.log(result, resultsbol);
+            });
+        }
+        
+        function mapResults(type){
+            $( ".list-group" ).empty();
+            deleteMarkers();
+              var useful_results;
+              $.each(results, function(i, v){
+                  if(v['clinic_type'] == type){
+                      
+                      //Add to map
+                        var location = {lat: parseFloat(v['latitude']), lng: parseFloat(v['longitude'])};
+                        var contentString ='<h5>'+v['site_name']+'</h5>';
+                        var infowindow = new google.maps.InfoWindow({
+                          content: contentString
+                        });
+                        //var iconMarker = getIcon(v.school_type);
+                        var marker = new google.maps.Marker({
+                          position: location,
+                          map: map,
+                          title: 'Chicago'
+                        });
+                        marker.addListener('click', function() {
+                          infowindow.open(map, marker);
+                        });
+                        markers.push(marker);
+                        
+                    //Add to list
+                    $("#list ul").append("<li class='list-group-item'>"+v['site_name'] +"</li>");
+                  }
+              });
+              
+        }
+        function initMap(){
+            map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 10,
+              center: {lat: 41.876481010656235, lng: -87.65}
+            });
+        }
+        // Deletes all markers in the array by removing references to them.
+          function deleteMarkers() {
+            clearMarkers();
+            markers = [];
+          }
+          // Sets the map on all markers in the array.
+      function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+
+      // Removes the markers from the map, but keeps them in the array.
+      function clearMarkers() {
+        setMapOnAll(null);
+      }
+      
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVPzVcDe54D7jqkBMZD4bdlvUaccqypGU&callback=initMap">
+    </script>
+</html>
