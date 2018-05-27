@@ -137,6 +137,7 @@
             var apiKey = "AIzaSyCm1SqTVT9h6J-kirvyWyYhDHxU5yH9l_A";
             var locationOBJ = {found: false, latitude: 0, longitude: 0, dest: ""};
             var geocoder;
+            var currRestaurantIndex = -1;
             var listOfRestaurants = [];
             
             function geoFindMe() {
@@ -191,7 +192,9 @@
             
             
             
-            
+            function initGeoLocationStuff(){
+                
+            }
             function showResults(){
                 $('#welcomeScreen').hide();
                 $('#cardView').show();
@@ -199,8 +202,12 @@
             }
             
             
-            function initGeoLocationStuff(){
-                
+            function getRestaurantIndex(){
+                if(currRestaurantIndex+1 < listOfRestaurants.length){
+                    currRestaurantIndex++;
+                    console.log(currRestaurantIndex);
+                    return currRestaurantIndex;
+                }
             }
             
             function getPlacesAtLoactions(){
@@ -217,10 +224,11 @@
                     'dataType': 'jsonp',
                     'success': function(response) {
                         var results = response["query"]["results"]["json"]['results'];
+                        console.log(results);
                         $.each(results, function(k,v){
                             listOfRestaurants.push(v.place_id);
                         });
-                        createTemplateView(0);
+                        createTemplateView(getRestaurantIndex());
                     },
                 });
             }
@@ -284,7 +292,7 @@
             function populateDisplay(details){
                 $('#spinnerLoader').hide();
                 $('#resultsView').show();
-                console.log(details);
+                //console.log(details);
                 var width =$(window).width();
                 var height = $(window).height() * .5;
                 console.log("height: ", height);
@@ -303,6 +311,13 @@
                 $('#spinnerLoader').hide();
                 $('#resultsView').show();
             }
+            
+            $('#dislikeRestaurant').click(function(){
+                createTemplateView(getRestaurantIndex());
+            });
+            $('#likeRestaurant').click(function(){
+                createTemplateView(getRestaurantIndex());
+            });
             
             
         </script>
