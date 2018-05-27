@@ -134,7 +134,7 @@
           
         </main>
         <script>
-            var apiKey = "AIzaSyCkPhkzkLfLUQmJ-c8QHHiIByXNFP3lY2w";
+            var apiKey = "AIzaSyCm1SqTVT9h6J-kirvyWyYhDHxU5yH9l_A";
             var locationOBJ = {found: false, latitude: 0, longitude: 0, dest: ""};
             var geocoder;
             var listOfRestaurants = [];
@@ -147,7 +147,7 @@
                 return;
               }
             
-              function success(position) {
+              async function success(position) {
                 locationOBJ.latitude  = position.coords.latitude;
                 locationOBJ.longitude = position.coords.longitude;
                 locationOBJ.found = true;
@@ -155,7 +155,8 @@
                 $('.searchArea2').hide();
                 $('#locationFound').show();
                 $('#beginResults').show();
-                $('#locationFound').html('Location: '+ geocodeLatLng());
+                var responseForGetCityName = await geocodeLatLng();
+                $('#locationFound').html('Location: '+ responseForGetCityName);
               }
             
               function error() {
@@ -167,24 +168,29 @@
               navigator.geolocation.getCurrentPosition(success, error);
             }
             
+            
             function geocodeLatLng(){
-                var latlng = {lat: parseFloat(locationOBJ.latitude), lng: parseFloat(locationOBJ.longitude)};
-                geocoder.geocode({'location': latlng}, function(results, status) {
-                if (status === 'OK') {
-                    if (results[1]) {
-                        locationOBJ.dest = results[1]["formatted_address"];
-                      return results[1]["formatted_address"];
-                    } else {
-                      window.alert('No results found');
-                    }
-                } else {
-                    window.alert('Geocoder failed due to: ' + status);
-                }  
-      
+                return new Promise((resolve, reject)=>{
+                    geocoder = new google.maps.Geocoder;
+                    var latlng = {lat: parseFloat(locationOBJ.latitude), lng: parseFloat(locationOBJ.longitude)};
+                    geocoder.geocode({'location': latlng}, function(results, status) {
+                        if (status === 'OK') {
+                            resolve(results[2]["formatted_address"]);
+                        }
+                        else{
+                            console.log("failed to locate city name");
+                            reject("Found");
+                        }
+                    });
                 });
-                return "Chicago";
-                
             }
+            
+            //
+            
+            
+            
+            
+            
             
             function showResults(){
                 $('#welcomeScreen').hide();
@@ -194,7 +200,7 @@
             
             
             function initGeoLocationStuff(){
-                geocoder = new google.maps.Geocoder;
+                
             }
             
             function getPlacesAtLoactions(){
